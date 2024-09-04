@@ -1,2 +1,4 @@
-# satisfactory-server-docker
-This is a Dockerized version of the Project Zomboid dedicated server.
+# Satisfactory Server Docker
+
+> [!IMPORTANT]
+> Using Docker Desktop with WSL2 on Windows will result in a very slow download!
