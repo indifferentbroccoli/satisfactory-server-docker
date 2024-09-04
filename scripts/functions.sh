@@ -44,3 +44,21 @@ install() {
   /home/steam/steamcmd/steamcmd.sh +runscript /home/steam/server/install.scmd
 }
 
+cpu_check(){
+  if [[ $(lscpu | grep 'Model name:' | sed 's/Model name:[[:space:]]*//g') = "Common KVM processor" ]]; then
+    LogWarn " Your CPU model is configured as \"Common KVM processor\". This may cause issues with the server."
+    return 1
+  else
+    return 0
+  fi
+}
+
+memory_check() {
+  RAMAVAILABLE=$(awk '/MemAvailable/ {printf( "%d\n", $2 / 1024000 )}' /proc/meminfo)
+  if [ "$RAMAVAILABLE" -lt "12" ]; then
+    LogWarn "You have less than 12GB of RAM available. This may cause issues with the server."
+    return 1
+  else
+    return 0
+  fi
+}

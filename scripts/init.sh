@@ -17,6 +17,11 @@ chown -R steam:steam /satisfactory /home/steam/
 
 cat /branding
 
+LogAction "Checking for compatibility issues"
+if cpu_check && memory_check; then
+    LogSuccess "Compatibility checks passed"
+fi
+
 install
 
 # Start the server
