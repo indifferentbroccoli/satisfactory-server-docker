@@ -21,4 +21,4 @@ elif [ "$GENERATE_SETTINGS" = "false" ]; then
 fi
 
 LogAction "Starting server"
-su steam -c ./FactoryServer.sh
+su steam -c "./FactoryServer.sh -Port=${GAME_PORT} -BeaconPort=${BEACON_PORT} -ServerQueryPort=${QUERY_PORT} ${SERVER_IP}"

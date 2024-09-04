@@ -2,3 +2,104 @@
 
 > [!IMPORTANT]
 > Using Docker Desktop with WSL2 on Windows will result in a very slow download!
+
+## Environment Variables
+
+### Server settings
+
+| Variable                  | Default   | Description             |
+|---------------------------|-----------|-------------------------|
+| `AUTO_PAUSE`              | `True`    | Auto pause              |
+| `AUTO_SAVE_ON_DISCONNECT` | `True`    | Auto save on disconnect |
+| `MAX_PLAYERS`             | `4`       | Maximum players         |
+| `GAME_PORT`               | `7777`    | Game port               |
+| `QUERY_PORT`              | `15777`   | Query port              |
+| `BEACON_PORT`             | `15000`   | Beacon port             |
+| `SERVER_IP`               | `0.0.0.0` | Server IP               |
+
+### Game settings
+
+| Variable                                                        | Default     | Description                                                   |
+|-----------------------------------------------------------------|-------------|---------------------------------------------------------------|
+| `TOTAL_NET_BANDWIDTH`                                           | `104857600` | Total bandwidth for the server (bytes)                        |
+| `MAX_DYNAMIC_BANDWIDTH`                                         | `104857600` | Maximum dynamic bandwidth for the server (bytes)              |
+| `MIN_DYNAMIC_BANDWIDTH`                                         | `104857600` | Minimum dynamic bandwidth for the server (bytes)              |
+| `MAX_POSITION_ERROR_SQUARED`                                    | `32.00f`    | Maximum position error squared                                |
+| `MOVE_REP_SIZE`                                                 | `512.0f`    | Movement replication size                                     |
+| `CLIENT_ADJUST_UPDATE_COST`                                     | `512.0f`    | Client adjust update cost                                     |
+| `MOVEMENT_TIME_DISCREPANCY_DETECTION`                           | `false`     | Movement time discrepancy detection                           |
+| `MOVEMENT_TIME_DISCREPANCY_RESOLUTION`                          | `false`     | Movement time discrepancy resolution                          |
+| `MOVEMENT_TIME_DISCREPANCY_FORCE_CORRECTIONS_DURING_RESOLUTION` | `false`     | Movement time discrepancy force corrections during resolution |
+| `MAX_CLIENT_UPDATE_INTERVAL`                                    | `2.20f`     | Maximum client update interval                                |
+| `MAX_MOVE_DELTA_TIME`                                           | `0.700f`    | Maximum move delta time                                       |
+| `MAX_CLIENT_SMOOTHING_DELTA_TIME`                               | `2.20f`     | Maximum client smoothing delta time                           |
+| `MAX_CLIENT_FORCED_UPDATE_DURATION`                             | `1.0f`      | Maximum client forced update duration                         |
+| `CLIENT_NET_SEND_MOVE_DELTA_TIME`                               | `0.0332`    | Client net send move delta time                               |
+| `CLIENT_NET_SEND_MOVE_DELTA_TIME_STATIONARY`                    | `0.0664`    | Client net send move delta time stationary                    |
+| `CLIENT_NET_SEND_MOVE_THROTTLE_OVER_PLAYER_COUNT`               | `99`        | Client net send move throttle over player count               |
+| `SERVER_FORCED_UPDATE_HITCH_THRESHOLD`                          | `2.800f`    | Server forced update hitch threshold                          |
+| `CONNECTION_TIMEOUT`                                            | `300.0`     | Connection timeout                                            |
+| `INITIAL_CONNECT_TIMEOUT`                                       | `300.0`     | Initial connect timeout                                       |
+
+### Game User settings
+
+| Variable                                    | Default      | Description                               |
+|---------------------------------------------|--------------|-------------------------------------------|
+| `INT_VALUES`                                | `()`         | Integer values                            |
+| `FLOAT_VALUES`                              | `()`         | Float values                              |
+| `PRIMARY_LANGUAGE`                          |              | Primary language                          |
+| `CURRENT_FG_GAME_USER_SETTINGS_VERSION`     | `0`          | Current FG game user settings version     |
+| `PREFERRED_ONLINE_INTEGRATION_MODE`         | `Undefined`  | Preferred online integration mode         |
+| `USE_VSYNC`                                 | `False`      | Use VSync                                 |
+| `USE_DYNAMIC_RESOLUTION`                    | `False`      | Use dynamic resolution                    |
+| `RESOLUTION_SIZE_X`                         | `1280`       | Resolution size X                         |
+| `RESOLUTION_SIZE_Y`                         | `720`        | Resolution size Y                         |
+| `LAST_USER_CONFIRMED_RESOLUTION_SIZE_X`     | `1280`       | Last user confirmed resolution size X     |
+| `LAST_USER_CONFIRMED_RESOLUTION_SIZE_Y`     | `720`        | Last user confirmed resolution size Y     |
+| `WINDOW_POS_X`                              | `-1`         | Window position X                         |
+| `WINDOW_POS_Y`                              | `-1`         | Window position Y                         |
+| `FULLSCREEN_MODE`                           | `1`          | Fullscreen mode                           |
+| `LAST_CONFIRMED_FULLSCREEN_MODE`            | `1`          | Last confirmed fullscreen mode            |
+| `PREFERRED_FULLSCREEN_MODE`                 | `1`          | Preferred fullscreen mode                 |
+| `VERSION`                                   | `5`          | Version                                   |
+| `AUDIO_QUALITY_LEVEL`                       | `0`          | Audio quality level                       |
+| `LAST_CONFIRMED_AUDIO_QUALITY_LEVEL`        | `0`          | Last confirmed audio quality level        |
+| `FRAME_RATE_LIMIT`                          | `0.000000`   | Frame rate limit                          |
+| `DESIRED_SCREEN_WIDTH`                      | `1280`       | Desired screen width                      |
+| `DESIRED_SCREEN_HEIGHT`                     | `720`        | Desired screen height                     |
+| `LAST_USER_CONFIRMED_DESIRED_SCREEN_WIDTH`  | `1280`       | Last user confirmed desired screen width  |
+| `LAST_USER_CONFIRMED_DESIRED_SCREEN_HEIGHT` | `720`        | Last user confirmed desired screen height |
+| `LAST_RECOMMENDED_SCREEN_WIDTH`             | `-1.000000`  | Last recommended screen width             |
+| `LAST_RECOMMENDED_SCREEN_HEIGHT`            | `-1.000000`  | Last recommended screen height            |
+| `LAST_CPU_BENCHMARK_RESULT`                 | `-1.000000`  | Last CPU benchmark result                 |
+| `LAST_GPU_BENCHMARK_RESULT`                 | `-1.000000`  | Last GPU benchmark result                 |
+| `LAST_GPU_BENCHMARK_MULTIPLIER`             | `1.000000`   | Last GPU benchmark multiplier             |
+| `USE_HDR_DISPLAY_OUTPUT`                    | `False`      | Use HDR display output                    |
+| `HDR_DISPLAY_OUTPUT_NITS`                   | `1000`       | HDR display output nits                   |
+| `RESOLUTION_QUALITY`                        | `100.000000` | Resolution quality                        |
+| `VIEW_DISTANCE_QUALITY`                     | `3`          | View distance quality                     |
+| `ANTI_ALIASING_QUALITY`                     | `3`          | Anti aliasing quality                     |
+| `SHADOW_QUALITY`                            | `3`          | Shadow quality                            |
+| `POST_PROCESS_QUALITY`                      | `3`          | Post process quality                      |
+| `TEXTURE_QUALITY`                           | `3`          | Texture quality                           |
+| `EFFECTS_QUALITY`                           | `3`          | Effects quality                           |
+| `FOLIAGE_QUALITY`                           | `3`          | Foliage quality                           |
+| `SHADING_QUALITY`                           | `3`          | Shading quality                           |
+| `USE_DESIRED_SCREEN_HEIGHT`                 | `False`      | Use desired screen height                 |
+
+### Scalability settings
+
+| Variable                | Default     | Description                                      |
+|-------------------------|-------------|--------------------------------------------------|
+| `TOTAL_NET_BANDWIDTH`   | `104857600` | Total bandwidth for the server (bytes)           |
+| `MAX_DYNAMIC_BANDWIDTH` | `104857600` | Maximum dynamic bandwidth for the server (bytes) |
+| `MIN_DYNAMIC_BANDWIDTH` | `104857600` | Minimum dynamic bandwidth for the server (bytes) |
+
+### Engine settings
+
+| Variable                    | Default     | Description                          |
+|-----------------------------|-------------|--------------------------------------|
+| `CONFIGURED_INTERNET_SPEED` | `104857600` | Configured internet speed (bytes)    |
+| `CONFIGURED_LAN_SPEED`      | `104857600` | Configured LAN speed (bytes)         |
+| `MAX_CLIENT_RATE`           | `104857600` | Maximum client rate (bytes)          |
+| `MAX_INTERNET_CLIENT_RATE`  | `104857600` | Maximum internet client rate (bytes) |
