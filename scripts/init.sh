@@ -24,6 +24,7 @@ term_handler() {
     if ! shutdown_server; then
         # Does not save
         kill -SIGTERM "$(pidof UnrealServer-Linux-Shipping)"
+    fi
     tail --pid="$killpid" -f 2>/dev/null
 }
 
