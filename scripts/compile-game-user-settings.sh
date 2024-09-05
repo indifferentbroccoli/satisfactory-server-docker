@@ -8,7 +8,7 @@ config_dir=$(dirname "$config_file")
 mkdir -p "$config_dir" || exit
 
 export INT_VALUES=${INT_VALUES:-"()"}
-export FLOAT_VALUES=${FLOAT_VALUES:-"()"}
+export FLOAT_VALUES=${FLOAT_VALUES:-"((\"FG.AutosaveInterval\", 300))"}
 export PRIMARY_LANGUAGE=${PRIMARY_LANGUAGE:-""}
 export CURRENT_FG_GAME_USER_SETTINGS_VERSION=${CURRENT_FG_GAME_USER_SETTINGS_VERSION:-0}
 export PREFERRED_ONLINE_INTEGRATION_MODE=${PREFERRED_ONLINE_INTEGRATION_MODE:-"Undefined"}
