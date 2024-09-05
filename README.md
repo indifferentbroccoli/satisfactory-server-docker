@@ -1,7 +1,90 @@
+<!-- markdownlint-disable-next-line -->
+![marketing_assets_banner](https://github.com/user-attachments/assets/b8b4ae5c-06bb-46a7-8d94-903a04595036)
+[![GitHub License](https://img.shields.io/github/license/indifferentbroccoli/satisfactory-server-docker?style=for-the-badge&color=6aa84f)](https://github.com/indifferentbroccoli/satisfactory-server-docker/blob/main/LICENSE)
+[![GitHub Release](https://img.shields.io/github/v/release/indifferentbroccoli/satisfactory-server-docker?style=for-the-badge&color=6aa84f)](https://github.com/indifferentbroccoli/satisfactory-server-docker/releases)
+[![GitHub Repo stars](https://img.shields.io/github/stars/indifferentbroccoli/satisfactory-server-docker?style=for-the-badge&color=6aa84f)](https://github.com/indifferentbroccoli/satisfactory-server-docker)
+[![Docker Pulls](https://img.shields.io/docker/pulls/indifferentbroccoli/satisfactory-server-docker?style=for-the-badge&color=6aa84f)](https://hub.docker.com/r/indifferentbroccoli/satisfactory-server-docker)
+
+Game server hosting
+
+Fast RAM, high-speed internet
+
+Eat lag for breakfast
+
+[Try our Project Zomboid Server hosting free for 2 days!](https://indifferentbroccoli.com/project-zomboid-server-hosting)
+
 # Satisfactory Server Docker
 
 > [!IMPORTANT]
 > Using Docker Desktop with WSL2 on Windows will result in a very slow download!
+
+## Server Requirements
+
+| Resource | Minimum                                                                 | Recommended |
+|----------|-------------------------------------------------------------------------|-------------|
+| CPU      | Recent (comparable to the Ryzen 5 3600 AMD or better) x86/64 processor. | n.a.        |
+| RAM      | 12GB                                                                    | 16GB        |
+| Storage  | 25GB                                                                    | 25GB        |
+
+## How to use
+
+> [!IMPORTANT]
+> .env settings will override the current settings in the `.ini` files
+> If you do not want that to happen, set GENERATE_SETTINGS=false
+
+Copy the .env.example file to a new file called .env file. Then use either `docker compose` or `docker run`
+
+> [!IMPORTANT]
+> Please make sure to claim your server and immediately set a strong password!
+
+### Docker compose
+
+Starting the server with Docker Compose:
+
+```yaml
+services:
+  satisfactory:
+    image: indifferentbroccoli/satisfactory-server-docker
+    restart: unless-stopped
+    container_name: satisfactory
+    stop_grace_period: 30s
+    ports:
+      - '7777:7777/udp'
+      - '15000:15000/udp'
+      - '15777:15777/udp'
+    environment:
+      PUID: 1000
+      PGID: 1000
+    env_file:
+      - .env.example
+    volumes:
+      - ./satisfactory/server-files:/satisfactory
+      - ./satisfactory/server-data:/home/steam/.config/Epic/FactoryGame/Saved/SaveGames
+
+```
+
+Then run:
+
+```bash
+docker-compose up -d
+```
+
+### Docker Run
+
+```bash
+docker run -d \
+    --restart unless-stopped \
+    --name satisfactory \
+    --stop-timeout 30 \
+    -p 7777:7777/udp \
+    -p 15000:15000/udp \
+    -p 15777:15777/udp \
+    -e GENERATE_SETTINGS=true \
+    --env-file .env \
+    -v ./satisfactory/server-files:/satisfactory \
+    -v ./satisfactory/server-data:/home/steam/.config/Epic/FactoryGame/Saved/SaveGames
+    indifferentbroccoli/satisfactory-server-docker
+```
 
 ## Environment Variables
 
@@ -103,3 +186,39 @@
 | `CONFIGURED_LAN_SPEED`      | `104857600` | Configured LAN speed (bytes)         |
 | `MAX_CLIENT_RATE`           | `104857600` | Maximum client rate (bytes)          |
 | `MAX_INTERNET_CLIENT_RATE`  | `104857600` | Maximum internet client rate (bytes) |
+
+## Developer information
+
+### Building the image
+
+You can build the image from the Dockerfile using the following command:
+
+```bash
+docker build -t indifferentbroccoli/satisfactory-server-docker .
+```
+
+### Scripts
+
+#### init.sh
+
+Entrypoint of the container. This script will check if the server is installed and if not, it will install it.
+Also has a term_handler function to catch SIGTERM signals to gracefully stop the server.
+Features basic checks that will confirm if the server can be started.
+
+#### start.sh
+
+Starts the server with the settings from the .env file.
+Will also call the `compile-*-settings.sh` scripts to generate the server settings.
+
+#### install.scmd
+
+Installs the server. This script will download the server files using SteamCMD and extract them to the server directory.
+
+#### funtions.sh
+
+Contains functions that are used in the other scripts.
+
+#### compile-*-settings.sh scripts
+
+Generates the server settings file from the .env file.
+Uses envsubst to replace the variables in the `.ini.template` files.
