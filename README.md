@@ -39,6 +39,11 @@ Copy the .env.example file to a new file called .env file. Then use either `dock
 
 ### Docker compose
 
+> [!WARNING]
+> As of v5.0.4 the console tab in the server manager is the only way to execute commands
+> When you want to shutdown the server you need to use the console tab and type `quit` to save the game and stop the server
+> If you do not do this, the server may not save the game and you may lose progress.
+
 Starting the server with Docker Compose:
 
 ```yaml
@@ -126,49 +131,49 @@ docker run -d \
 
 ### Game User settings
 
-| Variable                                    | Default      | Description                               |
-|---------------------------------------------|--------------|-------------------------------------------|
-| `INT_VALUES`                                | `()`         | Integer values                            |
-| `FLOAT_VALUES`                              | `()`         | Float values                              |
-| `PRIMARY_LANGUAGE`                          |              | Primary language                          |
-| `CURRENT_FG_GAME_USER_SETTINGS_VERSION`     | `0`          | Current FG game user settings version     |
-| `PREFERRED_ONLINE_INTEGRATION_MODE`         | `Undefined`  | Preferred online integration mode         |
-| `USE_VSYNC`                                 | `False`      | Use VSync                                 |
-| `USE_DYNAMIC_RESOLUTION`                    | `False`      | Use dynamic resolution                    |
-| `RESOLUTION_SIZE_X`                         | `1280`       | Resolution size X                         |
-| `RESOLUTION_SIZE_Y`                         | `720`        | Resolution size Y                         |
-| `LAST_USER_CONFIRMED_RESOLUTION_SIZE_X`     | `1280`       | Last user confirmed resolution size X     |
-| `LAST_USER_CONFIRMED_RESOLUTION_SIZE_Y`     | `720`        | Last user confirmed resolution size Y     |
-| `WINDOW_POS_X`                              | `-1`         | Window position X                         |
-| `WINDOW_POS_Y`                              | `-1`         | Window position Y                         |
-| `FULLSCREEN_MODE`                           | `1`          | Fullscreen mode                           |
-| `LAST_CONFIRMED_FULLSCREEN_MODE`            | `1`          | Last confirmed fullscreen mode            |
-| `PREFERRED_FULLSCREEN_MODE`                 | `1`          | Preferred fullscreen mode                 |
-| `VERSION`                                   | `5`          | Version                                   |
-| `AUDIO_QUALITY_LEVEL`                       | `0`          | Audio quality level                       |
-| `LAST_CONFIRMED_AUDIO_QUALITY_LEVEL`        | `0`          | Last confirmed audio quality level        |
-| `FRAME_RATE_LIMIT`                          | `0.000000`   | Frame rate limit                          |
-| `DESIRED_SCREEN_WIDTH`                      | `1280`       | Desired screen width                      |
-| `DESIRED_SCREEN_HEIGHT`                     | `720`        | Desired screen height                     |
-| `LAST_USER_CONFIRMED_DESIRED_SCREEN_WIDTH`  | `1280`       | Last user confirmed desired screen width  |
-| `LAST_USER_CONFIRMED_DESIRED_SCREEN_HEIGHT` | `720`        | Last user confirmed desired screen height |
-| `LAST_RECOMMENDED_SCREEN_WIDTH`             | `-1.000000`  | Last recommended screen width             |
-| `LAST_RECOMMENDED_SCREEN_HEIGHT`            | `-1.000000`  | Last recommended screen height            |
-| `LAST_CPU_BENCHMARK_RESULT`                 | `-1.000000`  | Last CPU benchmark result                 |
-| `LAST_GPU_BENCHMARK_RESULT`                 | `-1.000000`  | Last GPU benchmark result                 |
-| `LAST_GPU_BENCHMARK_MULTIPLIER`             | `1.000000`   | Last GPU benchmark multiplier             |
-| `USE_HDR_DISPLAY_OUTPUT`                    | `False`      | Use HDR display output                    |
-| `HDR_DISPLAY_OUTPUT_NITS`                   | `1000`       | HDR display output nits                   |
-| `RESOLUTION_QUALITY`                        | `100.000000` | Resolution quality                        |
-| `VIEW_DISTANCE_QUALITY`                     | `3`          | View distance quality                     |
-| `ANTI_ALIASING_QUALITY`                     | `3`          | Anti aliasing quality                     |
-| `SHADOW_QUALITY`                            | `3`          | Shadow quality                            |
-| `POST_PROCESS_QUALITY`                      | `3`          | Post process quality                      |
-| `TEXTURE_QUALITY`                           | `3`          | Texture quality                           |
-| `EFFECTS_QUALITY`                           | `3`          | Effects quality                           |
-| `FOLIAGE_QUALITY`                           | `3`          | Foliage quality                           |
-| `SHADING_QUALITY`                           | `3`          | Shading quality                           |
-| `USE_DESIRED_SCREEN_HEIGHT`                 | `False`      | Use desired screen height                 |
+| Variable                                    | Default                          | Description                               |
+|---------------------------------------------|----------------------------------|-------------------------------------------|
+| `INT_VALUES`                                | `()`                             | Integer values                            |
+| `FLOAT_VALUES`                              | `(("FG.AutosaveInterval", 300))` | Float values                              |
+| `PRIMARY_LANGUAGE`                          |                                  | Primary language                          |
+| `CURRENT_FG_GAME_USER_SETTINGS_VERSION`     | `0`                              | Current FG game user settings version     |
+| `PREFERRED_ONLINE_INTEGRATION_MODE`         | `Undefined`                      | Preferred online integration mode         |
+| `USE_VSYNC`                                 | `False`                          | Use VSync                                 |
+| `USE_DYNAMIC_RESOLUTION`                    | `False`                          | Use dynamic resolution                    |
+| `RESOLUTION_SIZE_X`                         | `1280`                           | Resolution size X                         |
+| `RESOLUTION_SIZE_Y`                         | `720`                            | Resolution size Y                         |
+| `LAST_USER_CONFIRMED_RESOLUTION_SIZE_X`     | `1280`                           | Last user confirmed resolution size X     |
+| `LAST_USER_CONFIRMED_RESOLUTION_SIZE_Y`     | `720`                            | Last user confirmed resolution size Y     |
+| `WINDOW_POS_X`                              | `-1`                             | Window position X                         |
+| `WINDOW_POS_Y`                              | `-1`                             | Window position Y                         |
+| `FULLSCREEN_MODE`                           | `1`                              | Fullscreen mode                           |
+| `LAST_CONFIRMED_FULLSCREEN_MODE`            | `1`                              | Last confirmed fullscreen mode            |
+| `PREFERRED_FULLSCREEN_MODE`                 | `1`                              | Preferred fullscreen mode                 |
+| `VERSION`                                   | `5`                              | Version                                   |
+| `AUDIO_QUALITY_LEVEL`                       | `0`                              | Audio quality level                       |
+| `LAST_CONFIRMED_AUDIO_QUALITY_LEVEL`        | `0`                              | Last confirmed audio quality level        |
+| `FRAME_RATE_LIMIT`                          | `0.000000`                       | Frame rate limit                          |
+| `DESIRED_SCREEN_WIDTH`                      | `1280`                           | Desired screen width                      |
+| `DESIRED_SCREEN_HEIGHT`                     | `720`                            | Desired screen height                     |
+| `LAST_USER_CONFIRMED_DESIRED_SCREEN_WIDTH`  | `1280`                           | Last user confirmed desired screen width  |
+| `LAST_USER_CONFIRMED_DESIRED_SCREEN_HEIGHT` | `720`                            | Last user confirmed desired screen height |
+| `LAST_RECOMMENDED_SCREEN_WIDTH`             | `-1.000000`                      | Last recommended screen width             |
+| `LAST_RECOMMENDED_SCREEN_HEIGHT`            | `-1.000000`                      | Last recommended screen height            |
+| `LAST_CPU_BENCHMARK_RESULT`                 | `-1.000000`                      | Last CPU benchmark result                 |
+| `LAST_GPU_BENCHMARK_RESULT`                 | `-1.000000`                      | Last GPU benchmark result                 |
+| `LAST_GPU_BENCHMARK_MULTIPLIER`             | `1.000000`                       | Last GPU benchmark multiplier             |
+| `USE_HDR_DISPLAY_OUTPUT`                    | `False`                          | Use HDR display output                    |
+| `HDR_DISPLAY_OUTPUT_NITS`                   | `1000`                           | HDR display output nits                   |
+| `RESOLUTION_QUALITY`                        | `100.000000`                     | Resolution quality                        |
+| `VIEW_DISTANCE_QUALITY`                     | `3`                              | View distance quality                     |
+| `ANTI_ALIASING_QUALITY`                     | `3`                              | Anti aliasing quality                     |
+| `SHADOW_QUALITY`                            | `3`                              | Shadow quality                            |
+| `POST_PROCESS_QUALITY`                      | `3`                              | Post process quality                      |
+| `TEXTURE_QUALITY`                           | `3`                              | Texture quality                           |
+| `EFFECTS_QUALITY`                           | `3`                              | Effects quality                           |
+| `FOLIAGE_QUALITY`                           | `3`                              | Foliage quality                           |
+| `SHADING_QUALITY`                           | `3`                              | Shading quality                           |
+| `USE_DESIRED_SCREEN_HEIGHT`                 | `False`                          | Use desired screen height                 |
 
 ### Scalability settings
 
