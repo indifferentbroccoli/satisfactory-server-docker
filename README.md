@@ -11,7 +11,7 @@ Fast RAM, high-speed internet
 
 Eat lag for breakfast
 
-[Try our Satisfactorya Server hosting free for 2 days!](https://indifferentbroccoli.com/satisfactory-server-hosting)
+[Try our Satisfactory Server hosting free for 2 days!](https://indifferentbroccoli.com/satisfactory-server-hosting)
 
 # Satisfactory Server Docker
 
