@@ -1,0 +1,19 @@
+---
+services:
+  satisfactory:
+    image: test
+    restart: unless-stopped
+    container_name: satisfactory
+    stop_grace_period: 30s
+    ports:
+      - '7777:7777/udp'
+      - '15000:15000/udp'
+      - '15777:15777/udp'
+    environment:
+      PUID: 1000
+      PGID: 1000
+    env_file:
+      - .env.example
+    volumes:
+      - ./satisfactory/server-files:/satisfactory
+      - ./satisfactory/server-data:/home/steam/.config/Epic/FactoryGame/Saved/SaveGames

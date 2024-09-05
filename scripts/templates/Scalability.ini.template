@@ -1,0 +1,4 @@
+[NetworkQuality@3]
+TotalNetBandwidth=$TOTAL_NET_BANDWIDTH
+MaxDynamicBandwidth=$MAX_DYNAMIC_BANDWIDTH
+MinDynamicBandwidth=$MIN_DYNAMIC_BANDWIDTH

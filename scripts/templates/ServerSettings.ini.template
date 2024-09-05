@@ -1,0 +1,3 @@
+[/Script/FactoryGame.FGServerSubsystem]
+mAutoPause=$AUTO_PAUSE
+mAutoSaveOnDisconnect=$AUTO_SAVE_ON_DISCONNECT

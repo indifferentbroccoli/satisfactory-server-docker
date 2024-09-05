@@ -1,0 +1,15 @@
+// Do not shutdown on a failed command
+@ShutdownOnFailedCommand 0
+
+//No password as this is unattended
+@NoPromptForPassword 1
+
+// Set the game installation directory
+force_install_dir /satisfactory
+
+login anonymous
+
+// Install/Update the Satisfactory Dedicated Server
+app_update 1690800 validate
+
+quit
