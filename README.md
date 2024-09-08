@@ -54,9 +54,7 @@ services:
     container_name: satisfactory
     stop_grace_period: 30s
     ports:
-      - '7777:7777/udp'
-      - '15000:15000/udp'
-      - '15777:15777/udp'
+      - '7777:7777'
     environment:
       PUID: 1000
       PGID: 1000
@@ -81,9 +79,7 @@ docker run -d \
     --restart unless-stopped \
     --name satisfactory \
     --stop-timeout 30 \
-    -p 7777:7777/udp \
-    -p 15000:15000/udp \
-    -p 15777:15777/udp \
+    -p 7777:7777 \
     -e GENERATE_SETTINGS=true \
     --env-file .env \
     -v ./satisfactory/server-files:/satisfactory \
@@ -101,8 +97,6 @@ docker run -d \
 | `AUTO_SAVE_ON_DISCONNECT` | `True`    | Auto save on disconnect |
 | `MAX_PLAYERS`             | `4`       | Maximum players         |
 | `GAME_PORT`               | `7777`    | Game port               |
-| `QUERY_PORT`              | `15777`   | Query port              |
-| `BEACON_PORT`             | `15000`   | Beacon port             |
 | `SERVER_IP`               | `0.0.0.0` | Server IP               |
 
 ### Game settings
