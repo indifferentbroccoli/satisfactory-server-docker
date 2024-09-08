@@ -60,6 +60,7 @@ services:
     environment:
       PUID: 1000
       PGID: 1000
+      GENERATE_SETTINGS: true
     env_file:
       - .env.example
     volumes:
