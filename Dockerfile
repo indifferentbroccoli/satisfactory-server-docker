@@ -32,4 +32,6 @@ WORKDIR /home/steam/server
 HEALTHCHECK --start-period=5m \
             CMD pgrep "UnrealServer" > /dev/null || exit 1
 
+EXPOSE 7777/udp 7777/tcp
+
 ENTRYPOINT ["/home/steam/server/init.sh"]

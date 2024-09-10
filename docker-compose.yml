@@ -6,7 +6,8 @@ services:
     container_name: satisfactory
     stop_grace_period: 30s
     ports:
-      - '7777:7777'
+      - '7777:7777/udp'
+      - '7777:7777/tcp'
     environment:
       PUID: 1000
       PGID: 1000
