@@ -7,8 +7,7 @@ services:
     stop_grace_period: 30s
     ports:
       - '7777:7777/udp'
-      - '15000:15000/udp'
-      - '15777:15777/udp'
+      - '7777:7777/tcp'
     environment:
       PUID: 1000
       PGID: 1000

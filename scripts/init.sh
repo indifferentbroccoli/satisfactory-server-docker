@@ -27,7 +27,7 @@ install
 # shellcheck disable=SC2317
 term_handler() {
     LogWarn "SIGTERM received, shutting down server"
-    kill -SIGTERM "$(pidof UnrealServer-Linux-Shipping)"
+    kill -SIGTERM "$(pidof FactoryServer-Linux-Shipping)"
     tail --pid="$killpid" -f 2>/dev/null
 }
 
