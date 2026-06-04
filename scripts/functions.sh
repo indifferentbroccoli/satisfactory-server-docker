@@ -52,7 +52,7 @@ install() {
 
   local manifest_args=()
   if [ -n "${GAME_MANIFEST:-}" ]; then
-    manifest_args=(-manifest "${GAME_MANIFEST}")
+    manifest_args=(-depot 1690802 -manifest "${GAME_MANIFEST}")
     LogInfo "Pinning to manifest: ${GAME_MANIFEST}"
   fi
 

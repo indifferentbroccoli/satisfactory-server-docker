@@ -3,8 +3,11 @@
 source "/home/steam/server/functions.sh"
 
 config_file="/satisfactory/FactoryGame/Saved/Config/LinuxServer/Game.ini"
+config_dir=$(dirname "$config_file")
 
 MAX_PLAYERS=${MAX_PLAYERS:-8}
+
+mkdir -p "$config_dir" || exit
 
 if [ -f "$config_file" ] && grep -q "^MaxPlayers=" "$config_file"; then
     sed -i "s/^MaxPlayers=.*/MaxPlayers=$MAX_PLAYERS/" "$config_file"
