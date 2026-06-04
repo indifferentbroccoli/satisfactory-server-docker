@@ -34,6 +34,10 @@ Eat lag for breakfast
 > If you do not want that to happen, set GENERATE_SETTINGS=false
 
 Copy the .env.example file to a new file called .env file. Then use either `docker compose` or `docker run`
+> [!TIP]
+> **Switching between versions (e.g. rolling back from 1.2 to 1.1)**
+> Set `BRANCH=public` and `GAME_MANIFEST=<id>` in your `.env`. Find manifest IDs for each game version at [SteamDB — Satisfactory depots](https://steamdb.info/app/1690800/depots/). Leave `GAME_MANIFEST` empty to always use the latest release.
+> Set `BRANCH=experimental` (with no manifest) to follow the experimental/beta branch.
 
 > [!IMPORTANT]
 > Please make sure to claim your server and immediately set a strong password!
@@ -100,12 +104,14 @@ docker run -d \
 
 ### Container settings
 
-| Variable            | Default  | Description                                                                     |
-|---------------------|----------|---------------------------------------------------------------------------------|
-| `PUID`              | Required | User ID to run the server as                                                    |
-| `PGID`              | Required | Group ID to run the server as                                                   |
-| `GENERATE_SETTINGS` | `true`   | Generate settings from environment variables                                    |
-| `BRANCH`            | `public` | Steam branch to install (`public` for stable or `experimental` for experimental) |
+| Variable            | Default  | Description                                                                      |
+|---------------------|----------|-----------------------------------------------------------------------------------|
+| `PUID`              | Required | User ID to run the server as                                                      |
+| `PGID`              | Required | Group ID to run the server as                                                     |
+| `GENERATE_SETTINGS` | `true`   | Generate settings from environment variables                                      |
+| `BRANCH`            | `public` | Game branch: `public` (1.x stable) or `experimental`                             |
+| `UPDATE_ON_START`   | `true`   | Download/update server files on container start. Set to `false` to skip          |
+| `GAME_MANIFEST`     |          | Pin to a specific game version by [SteamDB manifest ID](https://steamdb.info/app/1690800/depots/). Leave empty for latest |
 
 ### Server settings
 
@@ -228,9 +234,9 @@ Features basic checks that will confirm if the server can be started.
 Starts the server with the settings from the .env file.
 Will also call the `compile-*-settings.sh` scripts to generate the server settings.
 
-#### install.scmd
+#### functions.sh (install)
 
-Installs the server. This script will download the server files using SteamCMD and extract them to the server directory.
+Installs the server. This script will download the server files using DepotDownloader.
 
 #### funtions.sh
 

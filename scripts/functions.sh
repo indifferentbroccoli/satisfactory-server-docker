@@ -41,12 +41,33 @@ Log() {
 
 install() {
   LogAction "Starting server install"
-  LogInfo "Installing branch: ${BRANCH}"
-  envsubst < /home/steam/server/install.scmd > /tmp/install.scmd
-  if ! /home/steam/steamcmd/steamcmd.sh +runscript /tmp/install.scmd; then
-    LogError "Failed to install server branch ${BRANCH}"
+
+  local branch_args=()
+  if [ "${BRANCH}" = "experimental" ]; then
+    branch_args=(-beta experimental)
+    LogInfo "Installing branch: experimental"
+  else
+    LogInfo "Installing branch: public"
+  fi
+
+  local manifest_args=()
+  if [ -n "${GAME_MANIFEST:-}" ]; then
+    manifest_args=(-manifest "${GAME_MANIFEST}")
+    LogInfo "Pinning to manifest: ${GAME_MANIFEST}"
+  fi
+
+  if ! /depotdownloader/DepotDownloader \
+    -app 1690800 \
+    -username anonymous \
+    "${branch_args[@]}" \
+    "${manifest_args[@]}" \
+    -dir /satisfactory \
+    -validate; then
+    LogError "Failed to install server (branch: ${BRANCH})"
     exit 1
   fi
+
+  LogSuccess "Server install complete"
 }
 
 cpu_check(){

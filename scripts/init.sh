@@ -13,7 +13,7 @@ else
     groupmod -o -g "${PGID}" steam
 fi
 
-chown -R steam:steam /satisfactory /home/steam/
+chown -R steam:steam /home/steam/
 
 cat /branding
 
@@ -22,7 +22,13 @@ if cpu_check && memory_check; then
     LogSuccess "Compatibility checks passed"
 fi
 
-install
+if [ "${UPDATE_ON_START:-true}" = "true" ]; then
+    install
+else
+    LogWarn "UPDATE_ON_START is set to false, skipping server update"
+fi
+
+chown -R steam:steam /satisfactory
 
 # shellcheck disable=SC2317
 term_handler() {
