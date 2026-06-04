@@ -58,7 +58,6 @@ install() {
 
   if ! /depotdownloader/DepotDownloader \
     -app 1690800 \
-    -username anonymous \
     "${branch_args[@]}" \
     "${manifest_args[@]}" \
     -dir /satisfactory \
