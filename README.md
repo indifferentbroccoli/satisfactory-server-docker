@@ -112,6 +112,8 @@ docker run -d \
 | `BRANCH`            | `public` | Game branch: `public` (1.x stable) or `experimental`                             |
 | `UPDATE_ON_START`   | `true`   | Download/update server files on container start. Set to `false` to skip          |
 | `GAME_MANIFEST`     |          | Pin to a specific game version by [SteamDB manifest ID](https://steamdb.info/app/1690800/depots/). Leave empty for latest |
+| `STEAM_USERNAME`    |          | Steam username — required when `GAME_MANIFEST` is set |
+| `STEAM_PASSWORD`    |          | Steam password — required when `GAME_MANIFEST` is set |
 
 ### Server settings
 

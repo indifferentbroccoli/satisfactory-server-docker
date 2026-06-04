@@ -51,13 +51,21 @@ install() {
   fi
 
   local manifest_args=()
+  local auth_args=()
   if [ -n "${GAME_MANIFEST:-}" ]; then
     manifest_args=(-depot 1690802 -manifest "${GAME_MANIFEST}")
     LogInfo "Pinning to manifest: ${GAME_MANIFEST}"
+
+    if [ -z "${STEAM_USERNAME:-}" ] || [ -z "${STEAM_PASSWORD:-}" ]; then
+      LogError "GAME_MANIFEST requires a Steam login. Set STEAM_USERNAME and STEAM_PASSWORD."
+      exit 1
+    fi
+    auth_args=(-username "${STEAM_USERNAME}" -password "${STEAM_PASSWORD}")
   fi
 
   if ! /depotdownloader/DepotDownloader \
     -app 1690800 \
+    "${auth_args[@]}" \
     "${branch_args[@]}" \
     "${manifest_args[@]}" \
     -dir /satisfactory \
