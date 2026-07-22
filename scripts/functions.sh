@@ -74,6 +74,9 @@ install() {
     exit 1
   fi
 
+  chmod +x /satisfactory/FactoryServer.sh
+  find /satisfactory -name "FactoryServer-Linux-Shipping" -exec chmod +x {} +
+
   LogSuccess "Server install complete"
 }
 
