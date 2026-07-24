@@ -29,6 +29,7 @@ else
 fi
 
 chown -R steam:steam /satisfactory
+chmod +x /satisfactory/FactoryServer.sh
 
 # shellcheck disable=SC2317
 term_handler() {
