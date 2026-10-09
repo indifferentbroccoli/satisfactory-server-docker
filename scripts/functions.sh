@@ -98,3 +98,57 @@ memory_check() {
     return 0
   fi
 }
+
+install_mods() {
+  local mods_dir="/satisfactory/FactoryGame/Mods"
+  local marker="${mods_dir}/.installed_mods"
+  local mod id
+
+  if [ -z "${MODS}" ]; then
+    return
+  fi
+
+  LogAction "Checking mods for updates"
+  mkdir -p "${mods_dir}"
+
+  for mod in $(tr ',' ' ' 2>/dev/null < "${marker}"); do
+    if [[ ",${MODS}," != *",${mod},"* ]]; then
+      LogInfo "Removing mod ${mod}"
+      rm -rf "${mods_dir:?}/${mod}"
+    fi
+  done
+
+  for mod in ${MODS//,/ }; do
+    id=$(curl -sf https://api.ficsit.app/v2/query -H 'Content-Type: application/json' \
+      -d "{\"query\":\"{ getModByReference(modReference: \\\"${mod}\\\") { latestVersions { release { id } } } }\"}" \
+      | grep -o '"id":"[^"]*"' | cut -d'"' -f4)
+
+    if [ -z "${id}" ]; then
+      if [ -d "${mods_dir}/${mod}" ]; then
+        LogWarn "Could not check ${mod} for updates, keeping installed version"
+        continue
+      fi
+      LogError "Could not find a release for mod ${mod}"
+      exit 1
+    fi
+
+    if [ "${id}" = "$(cat "${mods_dir}/${mod}/.version" 2>/dev/null)" ]; then
+      LogInfo "Mod ${mod} is up to date"
+      continue
+    fi
+
+    LogInfo "Installing mod ${mod} (${id})..."
+    rm -rf "${mods_dir:?}/${mod}"
+    if ! curl -sfL "https://api.ficsit.app/v1/version/${id}/LinuxServer/download" -o /tmp/mod.zip \
+      || ! unzip -qo /tmp/mod.zip -d "${mods_dir}/${mod}"; then
+      LogError "Failed to install mod ${mod}"
+      rm -f /tmp/mod.zip
+      exit 1
+    fi
+    rm -f /tmp/mod.zip
+    echo "${id}" > "${mods_dir}/${mod}/.version"
+  done
+
+  echo "${MODS}" > "${marker}"
+  LogSuccess "Mods installed"
+}

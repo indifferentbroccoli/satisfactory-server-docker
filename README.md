@@ -114,6 +114,7 @@ docker run -d \
 | `GAME_MANIFEST`     |          | Pin to a specific game version by [SteamDB manifest ID](https://steamdb.info/app/1690800/depots/). Leave empty for latest |
 | `STEAM_USERNAME`    |          | Steam username — required when `GAME_MANIFEST` is set |
 | `STEAM_PASSWORD`    |          | Steam password — required when `GAME_MANIFEST` is set |
+| `MODS`              |          | Comma separated [ficsit.app](https://ficsit.app) mod references, e.g. `SML,RefinedPower`. Updated to the latest release on every start. |
 
 ### Server settings
 

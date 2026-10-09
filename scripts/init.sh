@@ -28,6 +28,8 @@ else
     LogWarn "UPDATE_ON_START is set to false, skipping server update"
 fi
 
+install_mods
+
 chown -R steam:steam /satisfactory
 
 # shellcheck disable=SC2317
