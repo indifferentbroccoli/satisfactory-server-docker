@@ -114,7 +114,7 @@ install_mods() {
   for mod in $(tr ',' ' ' 2>/dev/null < "${marker}"); do
     if [[ ",${MODS}," != *",${mod},"* ]]; then
       LogInfo "Removing mod ${mod}"
-      rm -rf "${mods_dir:?}/${mod}"
+      rm -rf "${mods_dir:?}/${mod}" "${mods_dir:?}/GameFeatures/${mod}"
     fi
   done
 
@@ -124,7 +124,7 @@ install_mods() {
       | grep -o '"id":"[^"]*"' | cut -d'"' -f4)
 
     if [ -z "${id}" ]; then
-      if [ -d "${mods_dir}/${mod}" ]; then
+      if [ -d "${mods_dir}/${mod}" ] || [ -d "${mods_dir}/GameFeatures/${mod}" ]; then
         LogWarn "Could not check ${mod} for updates, keeping installed version"
         continue
       fi
@@ -132,13 +132,13 @@ install_mods() {
       exit 1
     fi
 
-    if [ "${id}" = "$(cat "${mods_dir}/${mod}/.version" 2>/dev/null)" ]; then
+    if [ "${id}" = "$(cat "${mods_dir}/${mod}/.version" "${mods_dir}/GameFeatures/${mod}/.version" 2>/dev/null)" ]; then
       LogInfo "Mod ${mod} is up to date"
       continue
     fi
 
     LogInfo "Installing mod ${mod} (${id})..."
-    rm -rf "${mods_dir:?}/${mod}"
+    rm -rf "${mods_dir:?}/${mod}" "${mods_dir:?}/GameFeatures/${mod}"
     if ! curl -sfL "https://api.ficsit.app/v1/version/${id}/LinuxServer/download" -o /tmp/mod.zip \
       || ! unzip -qo /tmp/mod.zip -d "${mods_dir}/${mod}"; then
       LogError "Failed to install mod ${mod}"
@@ -147,6 +147,11 @@ install_mods() {
     fi
     rm -f /tmp/mod.zip
     echo "${id}" > "${mods_dir}/${mod}/.version"
+
+    if grep -qE '"GameFeatures?"[[:space:]]*:[[:space:]]*true' "${mods_dir}/${mod}/${mod}.uplugin" 2>/dev/null; then
+      mkdir -p "${mods_dir}/GameFeatures"
+      mv "${mods_dir}/${mod}" "${mods_dir}/GameFeatures/${mod}"
+    fi
   done
 
   echo "${MODS}" > "${marker}"
