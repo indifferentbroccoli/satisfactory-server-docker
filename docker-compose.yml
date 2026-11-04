@@ -9,9 +9,6 @@ services:
       - '7777:7777/udp'
       - '7777:7777/tcp'
       - '7778:7778/tcp'
-    environment:
-      PUID: 1000
-      PGID: 1000
     env_file:
       - .env.example
     volumes:

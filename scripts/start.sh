@@ -1,28 +1,32 @@
 #!/bin/bash
-# shellcheck source=scripts/functions.sh
-source "/home/steam/server/functions.sh"
+source /home/steam/server/functions.sh
 
-cd /satisfactory || exit
+cd /satisfactory || exit 1
 
-# if GENERATE_SETTINGS IS FALSE then we will not generate the settings
-if [ "$GENERATE_SETTINGS" = "true" ]; then
-  LogAction "Compiling Engine settings"
-  /home/steam/server/compile-engine-settings.sh
-  LogAction "Compiling Game settings"
-  /home/steam/server/compile-game-settings.sh
-  LogAction "Compiling Game User settings"
-  /home/steam/server/compile-game-user-settings.sh
-  LogAction "Compiling Scalability settings"
-  /home/steam/server/compile-scalability-settings.sh
-  LogAction "Compiling Server settings"
-  /home/steam/server/compile-server-settings.sh
-elif [ "$GENERATE_SETTINGS" = "false" ]; then
-  LogWarn "GENERATE_SETTINGS=false, not overwriting settings"
-fi
+args=(
+  -Port="$GAME_PORT"
+  -ReliablePort="$RELIABLE_PORT"
+  -ExternalReliablePort="$RELIABLE_PORT"
+  -ini:Engine:[HTTPServer.Listeners]:DefaultBindAddress=any
+)
 
-# Always update MAX_PLAYERS setting regardless of GENERATE_SETTINGS
-LogAction "Updating MAX_PLAYERS setting"
-/home/steam/server/update-max-players.sh
+add_ini_setting() {
+  local variable=$1
+  local setting=$2
+  if [ -n "${!variable}" ]; then
+    args+=("-ini:$setting=${!variable}")
+  fi
+}
+
+add_ini_setting MAX_PLAYERS              "Game:[/Script/Engine.GameSession]:MaxPlayers"
+add_ini_setting TOTAL_NET_BANDWIDTH      "Game:[/Script/Engine.GameNetworkManager]:TotalNetBandwidth"
+add_ini_setting MAX_DYNAMIC_BANDWIDTH    "Game:[/Script/Engine.GameNetworkManager]:MaxDynamicBandwidth"
+add_ini_setting MIN_DYNAMIC_BANDWIDTH    "Game:[/Script/Engine.GameNetworkManager]:MinDynamicBandwidth"
+add_ini_setting MAX_CLIENT_RATE          "Engine:[/Script/OnlineSubsystemUtils.IpNetDriver]:MaxClientRate"
+add_ini_setting MAX_INTERNET_CLIENT_RATE "Engine:[/Script/OnlineSubsystemUtils.IpNetDriver]:MaxInternetClientRate"
+add_ini_setting CONNECTION_TIMEOUT       "Engine:[/Script/OnlineSubsystemUtils.IpNetDriver]:ConnectionTimeout"
+add_ini_setting INITIAL_CONNECT_TIMEOUT  "Engine:[/Script/OnlineSubsystemUtils.IpNetDriver]:InitialConnectTimeout"
 
 LogAction "Starting server"
-su steam -c "./FactoryServer.sh -Port=${GAME_PORT} -ReliablePort=${RELIABLE_PORT} -ExternalReliablePort=${RELIABLE_PORT} -ini:Engine:[HTTPServer.Listeners]:DefaultBindAddress=any"
+LogInfo "Arguments: ${args[*]}"
+./FactoryServer.sh "${args[@]}"

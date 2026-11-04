@@ -16,9 +16,6 @@ Eat lag for breakfast
 
 # Satisfactory Server Docker
 
-> [!IMPORTANT]
-> Using Docker Desktop with WSL2 on Windows will result in a very slow download!
-
 ## Server Requirements
 
 | Resource | Minimum                                                                 | Recommended |
@@ -29,25 +26,16 @@ Eat lag for breakfast
 
 ## How to use
 
-> [!IMPORTANT]
-> .env settings will override the current settings in the `.ini` files
-> If you do not want that to happen, set GENERATE_SETTINGS=false
-
 Copy the .env.example file to a new file called .env file. Then use either `docker compose` or `docker run`
-> [!TIP]
-> **Switching between versions (e.g. rolling back from 1.2 to 1.1)**
-> Set `BRANCH=public` and `GAME_MANIFEST=<id>` in your `.env`. Find manifest IDs for each game version at [SteamDB — Satisfactory depots](https://steamdb.info/app/1690800/depots/). Leave `GAME_MANIFEST` empty to always use the latest release.
-> Set `BRANCH=experimental` (with no manifest) to follow the experimental/beta branch.
 
 > [!IMPORTANT]
-> Please make sure to claim your server and immediately set a strong password!
+> The server runs as user and group 1000, not root. The folders you mount must be owned by that user, for example `sudo chown -R 1000:1000 ./satisfactory`.
+> To use a different id, set `user: "1001:1001"` in docker compose or `--user 1001:1001` with docker run, and give your folders to that id instead.
+
+> [!IMPORTANT]
+> Please make sure to claim your server and immediately set a strong password.
 
 ### Docker compose
-
-> [!WARNING]
-> As of v5.0.4 the console tab in the server manager is the only way to execute commands
-> When you want to shutdown the server you need to use the console tab and type `quit` to save the game and stop the server
-> If you do not do this, the server may not save the game and you may lose progress.
 
 Starting the server with Docker Compose:
 
@@ -62,10 +50,6 @@ services:
       - '7777:7777/udp'
       - '7777:7777/tcp'
       - '7778:7778/tcp'
-    environment:
-      PUID: 1000
-      PGID: 1000
-      GENERATE_SETTINGS: true
     env_file:
       - .env.example
     volumes:
@@ -90,9 +74,6 @@ docker run -d \
     -p 7777:7777/udp \
     -p 7777:7777/tcp \
     -p 7778:7778/tcp \
-    -e PUID=1000 \
-    -e PGID=1000 \
-    -e GENERATE_SETTINGS=true \
     -e BRANCH=public \
     --env-file .env \
     -v ./satisfactory/server-files:/satisfactory \
@@ -106,148 +87,29 @@ docker run -d \
 
 | Variable            | Default  | Description                                                                      |
 |---------------------|----------|-----------------------------------------------------------------------------------|
-| `PUID`              | Required | User ID to run the server as                                                      |
-| `PGID`              | Required | Group ID to run the server as                                                     |
-| `GENERATE_SETTINGS` | `true`   | Generate settings from environment variables                                      |
-| `BRANCH`            | `public` | Game branch: `public` (1.x stable) or `experimental`                             |
-| `UPDATE_ON_START`   | `true`   | Download/update server files on container start. Set to `false` to skip          |
-| `GAME_MANIFEST`     |          | Pin to a specific game version by [SteamDB manifest ID](https://steamdb.info/app/1690800/depots/). Leave empty for latest |
-| `STEAM_USERNAME`    |          | Steam username — required when `GAME_MANIFEST` is set |
-| `STEAM_PASSWORD`    |          | Steam password — required when `GAME_MANIFEST` is set |
-| `MODS`              |          | Comma separated [ficsit.app](https://ficsit.app) mod references, e.g. `SML,RefinedPower`. Updated to the latest release on every start. |
+| `BRANCH`            | `public` | Game branch: `public` (stable) or `experimental`                             |
+| `UPDATE_ON_START`   | `true`   | Update server files on container start. When `false`, the server is only installed if it is missing |
+| `MODS`              |          | Comma separated [ficsit.app](https://ficsit.app) mod references, e.g. `SML,RefinedPower`. Updated to the latest release on every start. Mods removed from the list are deleted. |
 
 ### Server settings
 
-| Variable                  | Default   | Description             |
-|---------------------------|-----------|-------------------------|
-| `AUTO_PAUSE`              | `True`    | Auto pause              |
-| `AUTO_SAVE_ON_DISCONNECT` | `True`    | Auto save on disconnect |
-| `MAX_PLAYERS`             | `4`       | Maximum players         |
-| `GAME_PORT`               | `7777`    | Game port (UDP & TCP)   |
-| `RELIABLE_PORT`           | `7778`    | Reliable port (TCP)     |
-| `SERVER_IP`               | `0.0.0.0` | Server IP               |
+| Variable        | Default   | Description           |
+|-----------------|-----------|-----------------------|
+| `GAME_PORT`     | `7777`    | Game port (UDP & TCP) |
+| `RELIABLE_PORT` | `7778`    | Reliable port (TCP)   |
+| `SERVER_IP`     | `0.0.0.0` | Server IP             |
 
-### Game settings
+### Optional game settings
 
-| Variable                                                        | Default     | Description                                                   |
-|-----------------------------------------------------------------|-------------|---------------------------------------------------------------|
-| `TOTAL_NET_BANDWIDTH`                                           | `104857600` | Total bandwidth for the server (bytes)                        |
-| `MAX_DYNAMIC_BANDWIDTH`                                         | `104857600` | Maximum dynamic bandwidth for the server (bytes)              |
-| `MIN_DYNAMIC_BANDWIDTH`                                         | `104857600` | Minimum dynamic bandwidth for the server (bytes)              |
-| `MAX_POSITION_ERROR_SQUARED`                                    | `32.00f`    | Maximum position error squared                                |
-| `MOVE_REP_SIZE`                                                 | `512.0f`    | Movement replication size                                     |
-| `CLIENT_ADJUST_UPDATE_COST`                                     | `512.0f`    | Client adjust update cost                                     |
-| `MOVEMENT_TIME_DISCREPANCY_DETECTION`                           | `false`     | Movement time discrepancy detection                           |
-| `MOVEMENT_TIME_DISCREPANCY_RESOLUTION`                          | `false`     | Movement time discrepancy resolution                          |
-| `MOVEMENT_TIME_DISCREPANCY_FORCE_CORRECTIONS_DURING_RESOLUTION` | `false`     | Movement time discrepancy force corrections during resolution |
-| `MAX_CLIENT_UPDATE_INTERVAL`                                    | `2.20f`     | Maximum client update interval                                |
-| `MAX_MOVE_DELTA_TIME`                                           | `0.700f`    | Maximum move delta time                                       |
-| `MAX_CLIENT_SMOOTHING_DELTA_TIME`                               | `2.20f`     | Maximum client smoothing delta time                           |
-| `MAX_CLIENT_FORCED_UPDATE_DURATION`                             | `1.0f`      | Maximum client forced update duration                         |
-| `CLIENT_NET_SEND_MOVE_DELTA_TIME`                               | `0.0332`    | Client net send move delta time                               |
-| `CLIENT_NET_SEND_MOVE_DELTA_TIME_STATIONARY`                    | `0.0664`    | Client net send move delta time stationary                    |
-| `CLIENT_NET_SEND_MOVE_THROTTLE_OVER_PLAYER_COUNT`               | `99`        | Client net send move throttle over player count               |
-| `SERVER_FORCED_UPDATE_HITCH_THRESHOLD`                          | `2.800f`    | Server forced update hitch threshold                          |
-| `CONNECTION_TIMEOUT`                                            | `300.0`     | Connection timeout                                            |
-| `INITIAL_CONNECT_TIMEOUT`                                       | `300.0`     | Initial connect timeout                                       |
+Each variable is passed to the server as an `-ini:` argument. When it is unset, the value in the `.ini` file is used.
 
-### Game User settings
-
-| Variable                                    | Default                          | Description                               |
-|---------------------------------------------|----------------------------------|-------------------------------------------|
-| `INT_VALUES`                                | `()`                             | Integer values                            |
-| `FLOAT_VALUES`                              | `(("FG.AutosaveInterval", 300))` | Float values                              |
-| `PRIMARY_LANGUAGE`                          |                                  | Primary language                          |
-| `CURRENT_FG_GAME_USER_SETTINGS_VERSION`     | `0`                              | Current FG game user settings version     |
-| `PREFERRED_ONLINE_INTEGRATION_MODE`         | `Undefined`                      | Preferred online integration mode         |
-| `USE_VSYNC`                                 | `False`                          | Use VSync                                 |
-| `USE_DYNAMIC_RESOLUTION`                    | `False`                          | Use dynamic resolution                    |
-| `RESOLUTION_SIZE_X`                         | `1280`                           | Resolution size X                         |
-| `RESOLUTION_SIZE_Y`                         | `720`                            | Resolution size Y                         |
-| `LAST_USER_CONFIRMED_RESOLUTION_SIZE_X`     | `1280`                           | Last user confirmed resolution size X     |
-| `LAST_USER_CONFIRMED_RESOLUTION_SIZE_Y`     | `720`                            | Last user confirmed resolution size Y     |
-| `WINDOW_POS_X`                              | `-1`                             | Window position X                         |
-| `WINDOW_POS_Y`                              | `-1`                             | Window position Y                         |
-| `FULLSCREEN_MODE`                           | `1`                              | Fullscreen mode                           |
-| `LAST_CONFIRMED_FULLSCREEN_MODE`            | `1`                              | Last confirmed fullscreen mode            |
-| `PREFERRED_FULLSCREEN_MODE`                 | `1`                              | Preferred fullscreen mode                 |
-| `VERSION`                                   | `5`                              | Version                                   |
-| `AUDIO_QUALITY_LEVEL`                       | `0`                              | Audio quality level                       |
-| `LAST_CONFIRMED_AUDIO_QUALITY_LEVEL`        | `0`                              | Last confirmed audio quality level        |
-| `FRAME_RATE_LIMIT`                          | `0.000000`                       | Frame rate limit                          |
-| `DESIRED_SCREEN_WIDTH`                      | `1280`                           | Desired screen width                      |
-| `DESIRED_SCREEN_HEIGHT`                     | `720`                            | Desired screen height                     |
-| `LAST_USER_CONFIRMED_DESIRED_SCREEN_WIDTH`  | `1280`                           | Last user confirmed desired screen width  |
-| `LAST_USER_CONFIRMED_DESIRED_SCREEN_HEIGHT` | `720`                            | Last user confirmed desired screen height |
-| `LAST_RECOMMENDED_SCREEN_WIDTH`             | `-1.000000`                      | Last recommended screen width             |
-| `LAST_RECOMMENDED_SCREEN_HEIGHT`            | `-1.000000`                      | Last recommended screen height            |
-| `LAST_CPU_BENCHMARK_RESULT`                 | `-1.000000`                      | Last CPU benchmark result                 |
-| `LAST_GPU_BENCHMARK_RESULT`                 | `-1.000000`                      | Last GPU benchmark result                 |
-| `LAST_GPU_BENCHMARK_MULTIPLIER`             | `1.000000`                       | Last GPU benchmark multiplier             |
-| `USE_HDR_DISPLAY_OUTPUT`                    | `False`                          | Use HDR display output                    |
-| `HDR_DISPLAY_OUTPUT_NITS`                   | `1000`                           | HDR display output nits                   |
-| `RESOLUTION_QUALITY`                        | `100.000000`                     | Resolution quality                        |
-| `VIEW_DISTANCE_QUALITY`                     | `3`                              | View distance quality                     |
-| `ANTI_ALIASING_QUALITY`                     | `3`                              | Anti aliasing quality                     |
-| `SHADOW_QUALITY`                            | `3`                              | Shadow quality                            |
-| `POST_PROCESS_QUALITY`                      | `3`                              | Post process quality                      |
-| `TEXTURE_QUALITY`                           | `3`                              | Texture quality                           |
-| `EFFECTS_QUALITY`                           | `3`                              | Effects quality                           |
-| `FOLIAGE_QUALITY`                           | `3`                              | Foliage quality                           |
-| `SHADING_QUALITY`                           | `3`                              | Shading quality                           |
-| `USE_DESIRED_SCREEN_HEIGHT`                 | `False`                          | Use desired screen height                 |
-
-### Scalability settings
-
-| Variable                | Default     | Description                                      |
-|-------------------------|-------------|--------------------------------------------------|
-| `TOTAL_NET_BANDWIDTH`   | `104857600` | Total bandwidth for the server (bytes)           |
-| `MAX_DYNAMIC_BANDWIDTH` | `104857600` | Maximum dynamic bandwidth for the server (bytes) |
-| `MIN_DYNAMIC_BANDWIDTH` | `104857600` | Minimum dynamic bandwidth for the server (bytes) |
-
-### Engine settings
-
-| Variable                    | Default     | Description                          |
-|-----------------------------|-------------|--------------------------------------|
-| `CONFIGURED_INTERNET_SPEED` | `104857600` | Configured internet speed (bytes)    |
-| `CONFIGURED_LAN_SPEED`      | `104857600` | Configured LAN speed (bytes)         |
-| `MAX_CLIENT_RATE`           | `104857600` | Maximum client rate (bytes)          |
-| `MAX_INTERNET_CLIENT_RATE`  | `104857600` | Maximum internet client rate (bytes) |
-
-## Developer information
-
-### Building the image
-
-You can build the image from the Dockerfile using the following command:
-
-```bash
-docker build -t indifferentbroccoli/satisfactory-server-docker .
-```
-
-### Scripts
-
-#### init.sh
-
-Entrypoint of the container. This script will check if the server is installed and if not, it will install it.
-Also has a term_handler function to catch SIGTERM signals to gracefully stop the server.
-Features basic checks that will confirm if the server can be started.
-
-#### start.sh
-
-Starts the server with the settings from the .env file.
-Will also call the `compile-*-settings.sh` scripts to generate the server settings.
-
-#### functions.sh (install)
-
-Installs the server. This script will download the server files using DepotDownloader.
-
-#### funtions.sh
-
-Contains functions that are used in the other scripts.
-
-#### compile-*-settings.sh scripts
-
-Generates the server settings file from the .env file.
-Uses envsubst to replace the variables in the `.ini.template` files.
-
-
+| Variable                   | Example     | Setting                                                  |
+|----------------------------|-------------|----------------------------------------------------------|
+| `MAX_PLAYERS`              | `4`         | `Game.ini` `[/Script/Engine.GameSession]` `MaxPlayers`   |
+| `TOTAL_NET_BANDWIDTH`      | `104857600` | `Game.ini` `[/Script/Engine.GameNetworkManager]` `TotalNetBandwidth` |
+| `MAX_DYNAMIC_BANDWIDTH`    | `104857600` | `Game.ini` `[/Script/Engine.GameNetworkManager]` `MaxDynamicBandwidth` |
+| `MIN_DYNAMIC_BANDWIDTH`    | `104857600` | `Game.ini` `[/Script/Engine.GameNetworkManager]` `MinDynamicBandwidth` |
+| `MAX_CLIENT_RATE`          | `104857600` | `Engine.ini` `[/Script/OnlineSubsystemUtils.IpNetDriver]` `MaxClientRate` |
+| `MAX_INTERNET_CLIENT_RATE` | `104857600` | `Engine.ini` `[/Script/OnlineSubsystemUtils.IpNetDriver]` `MaxInternetClientRate` |
+| `CONNECTION_TIMEOUT`       | `300`       | `Engine.ini` `[/Script/OnlineSubsystemUtils.IpNetDriver]` `ConnectionTimeout` |
+| `INITIAL_CONNECT_TIMEOUT`  | `300`       | `Engine.ini` `[/Script/OnlineSubsystemUtils.IpNetDriver]` `InitialConnectTimeout` |

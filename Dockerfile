@@ -8,7 +8,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     unzip \
     procps \
-    gettext-base \
     libicu-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
@@ -30,7 +29,7 @@ RUN curl -sL \
     chmod +x /depotdownloader/DepotDownloader && \
     rm /tmp/dd.zip
 
-RUN useradd -m -s /bin/bash steam
+RUN useradd -m -u 1000 -s /bin/bash steam
 
 LABEL maintainer="support@indifferentbroccoli.com" \
       name="indifferentbroccoli/satisfactory-server-docker" \
@@ -41,7 +40,6 @@ ENV HOME=/home/steam \
     GAME_PORT=7777 \
     RELIABLE_PORT=7778 \
     SERVER_IP=0.0.0.0 \
-    GENERATE_SETTINGS=true \
     BRANCH=public \
     UPDATE_ON_START=true
 
@@ -50,7 +48,10 @@ COPY ./scripts /home/steam/server/
 COPY branding /branding
 
 RUN mkdir -p /satisfactory && \
+    chmod 777 /home/steam /satisfactory && \
     chmod +x /home/steam/server/*.sh
+
+USER steam
 
 WORKDIR /home/steam/server
 

@@ -1,49 +1,25 @@
 #!/bin/bash
-# shellcheck source=scripts/functions.sh
-source "/home/steam/server/functions.sh"
-
-LogAction "Set file permissions"
-
-# if the user has not defined a PUID and PGID, throw an error and exit
-if [ -z "${PUID}" ] || [ -z "${PGID}" ]; then
-    LogError "PUID and PGID not set. Please set these in the environment variables."
-    exit 1
-else
-    usermod -o -u "${PUID}" steam
-    groupmod -o -g "${PGID}" steam
-fi
-
-chown -R steam:steam /home/steam/
+source /home/steam/server/functions.sh
 
 cat /branding
 
-LogAction "Checking for compatibility issues"
-if cpu_check && memory_check; then
-    LogSuccess "Compatibility checks passed"
-fi
+warn_about_hardware
 
-if [ "${UPDATE_ON_START:-true}" = "true" ]; then
-    install
+if [ "$UPDATE_ON_START" = "true" ] || ! server_is_installed; then
+  install_server
 else
-    LogWarn "UPDATE_ON_START is set to false, skipping server update"
+  LogWarn "UPDATE_ON_START is false, skipping server update"
 fi
 
 install_mods
 
-chown -R steam:steam /satisfactory
-
-# shellcheck disable=SC2317
-term_handler() {
-    LogWarn "SIGTERM received, shutting down server"
-    kill -SIGTERM "$(pidof FactoryServer-Linux-Shipping)"
-    tail --pid="$killpid" -f 2>/dev/null
+stop_server() {
+  LogWarn "Stopping server"
+  kill -SIGTERM "$(pidof FactoryServer-Linux-Shipping)"
+  wait "$server_pid"
 }
+trap stop_server SIGTERM
 
-trap 'term_handler' SIGTERM
-
-# Start the server
 ./start.sh &
-
-# Process ID of su
-killpid="$!"
-wait "$killpid"
+server_pid=$!
+wait "$server_pid"
