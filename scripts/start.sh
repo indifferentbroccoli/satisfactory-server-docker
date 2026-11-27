@@ -27,6 +27,11 @@ add_ini_setting MAX_INTERNET_CLIENT_RATE "Engine:[/Script/OnlineSubsystemUtils.I
 add_ini_setting CONNECTION_TIMEOUT       "Engine:[/Script/OnlineSubsystemUtils.IpNetDriver]:ConnectionTimeout"
 add_ini_setting INITIAL_CONNECT_TIMEOUT  "Engine:[/Script/OnlineSubsystemUtils.IpNetDriver]:InitialConnectTimeout"
 
+if [ -n "$EXTRA_ARGS" ]; then
+  read -ra extra_args <<< "$EXTRA_ARGS"
+  args+=("${extra_args[@]}")
+fi
+
 LogAction "Starting server"
 LogInfo "Arguments: ${args[*]}"
 ./FactoryServer.sh "${args[@]}"

@@ -113,3 +113,7 @@ Each variable is passed to the server as an `-ini:` argument. When it is unset, 
 | `MAX_INTERNET_CLIENT_RATE` | `104857600` | `Engine.ini` `[/Script/OnlineSubsystemUtils.IpNetDriver]` `MaxInternetClientRate` |
 | `CONNECTION_TIMEOUT`       | `300`       | `Engine.ini` `[/Script/OnlineSubsystemUtils.IpNetDriver]` `ConnectionTimeout` |
 | `INITIAL_CONNECT_TIMEOUT`  | `300`       | `Engine.ini` `[/Script/OnlineSubsystemUtils.IpNetDriver]` `InitialConnectTimeout` |
+| `EXTRA_ARGS`               | `-ini:Game:[/Script/Engine.GameSession]:MaxSpectators=2` | Any other setting, as space separated `-ini:<File>:[<Section>]:<Key>=<Value>` arguments |
+
+> [!NOTE]
+> If you edit the `.ini` files directly, stop the server first. The server writes its current settings to the `.ini` files when it shuts down, so edits made while it is running are overwritten on restart.
